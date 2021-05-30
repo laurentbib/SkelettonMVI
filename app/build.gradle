@@ -1,0 +1,100 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.biblublab.skelettonmvi"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
+                        "room.incremental":"true",
+                        "room.expandProjection":"true"]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlin_version"
+    implementation "androidx.core:core-ktx:$rootProject.ext.core_ktx_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.ext.lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.ext.lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.ext.lifecycle_viewmodel_version"
+
+    //ui
+    implementation "com.google.android.material:material:$rootProject.ext.material_version"
+    implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompat_version"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraint_version"
+    implementation "androidx.fragment:fragment-ktx:$rootProject.ext.fragment_ktx_version"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$rootProject.swipe_refresh_version"
+
+    //Dagger hilt
+    implementation "com.google.dagger:hilt-android:$rootProject.ext.hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$rootProject.ext.hilt_view_model_version"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+    kapt "com.google.dagger:hilt-android-compiler:$rootProject.ext.hilt_version"
+    kapt "androidx.hilt:hilt-compiler:$rootProject.ext.hilt_view_model_version"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.ext.coroutines_version"
+
+    //test
+    testImplementation "junit:junit:$rootProject.ext.junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$rootProject.ext.junit_ext_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.ext.espresso_version"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$rootProject.ext.glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.ext.glide_version"
+    implementation("com.github.bumptech.glide:recyclerview-integration:$rootProject.ext.glide_version") { transitive = false }
+
+    // Shimmer
+    implementation "com.facebook.shimmer:shimmer:$rootProject.ext.shimmer_version"
+
+    //room
+    implementation "androidx.room:room-ktx:$rootProject.ext.room_version"
+    implementation "androidx.room:room-runtime:$rootProject.ext.room_version"
+    kapt "androidx.room:room-compiler:$rootProject.ext.room_version"
+    implementation "androidx.room:room-common:$rootProject.ext.room_version"
+
+    implementation project(':domain')
+    implementation project(":data")
+
+}
